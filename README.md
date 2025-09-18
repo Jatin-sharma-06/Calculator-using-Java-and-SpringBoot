@@ -25,8 +25,6 @@ It provides an API (and optional HTML UI) to perform basic arithmetic operations
 |------------------------|---------|
 | ![Postman Screenshot](docs/postman.png) | ![HTML Screenshot](docs/html.png) |
 
-*(You can replace `docs/postman.png` & `docs/html.png` with your actual screenshots)*
-
 ---
 
 ## 🛠️ Tech Stack
