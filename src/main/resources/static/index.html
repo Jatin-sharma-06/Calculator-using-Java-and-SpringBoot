@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Calculator</title>
+</head>
+<body>
+<h1>Calculator Application</h1>
+
+<label>Number 1:
+    <input
+            id="num1"
+            type="number"
+            step="any"
+    >
+</label>
+
+<br><br>
+
+<label>Number 2:
+    <input id="num2"
+           type="number"
+           step="any"
+    >
+</label>
+
+<br><br>
+
+<label>
+    Operation:
+    <select id="op">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+        <option value="%">%</option>
+    </select>
+</label>
+
+<br><br>
+
+<button onclick="calculate()">Calculate</button>
+
+<h3 id="result"></h3>
+
+<script>
+    async function calculate() {
+        const num1 = parseFloat(document.getElementById('num1').value);
+        const num2 = parseFloat(document.getElementById('num2').value);
+        const op = document.getElementById('op').value;
+
+        try {
+            const res = await fetch('/api/calculator/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ num1, num2, operation: op })
+            });
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(text);
+            }
+
+            const text = await res.text(); // API returns plain number
+            document.getElementById('result').textContent = 'Result: ' + text;
+        } catch (err) {
+            document.getElementById('result').textContent = 'Error: ' + err.message;
+        }
+    }
+</script>
+</body>
+</html>
+
+
+
+<!--<!doctype html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="utf-8" />-->
+<!--    <meta name="viewport" content="width=device-width,initial-scale=1" />-->
+<!--    <title>Calculator UI</title>-->
+<!--    <style>-->
+<!--        :root { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color: #222; }-->
+<!--        body { display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; background:#f4f7fb; }-->
+<!--        .card { width:380px; background:#fff; border-radius:12px; padding:20px; box-shadow:0 8px 30px rgba(20,30,50,0.08); }-->
+<!--        h1 { margin:0 0 10px; font-size:20px; }-->
+<!--        label { display:block; font-size:13px; margin-top:12px; color:#444; }-->
+<!--        input[type="number"], select { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e4e8f0; margin-top:6px; box-sizing:border-box; font-size:14px; }-->
+<!--        button { width:100%; margin-top:16px; padding:10px 12px; border-radius:8px; border:0; background:#2563eb; color:#fff; font-weight:600; cursor:pointer; font-size:15px; }-->
+<!--        button:disabled { background:#93b2ff; cursor:default; }-->
+<!--        .result { margin-top:16px; padding:12px; border-radius:8px; background:#f1f8ff; color:#08306b; font-weight:600; text-align:center; }-->
+<!--        .error { margin-top:12px; padding:10px; border-radius:8px; background:#fff3f2; color:#7a0911; border:1px solid #ffd2cf; }-->
+<!--        .small { font-size:12px; color:#666; margin-top:6px; }-->
+<!--        .row { display:flex; gap:8px; }-->
+<!--        .half { flex:1; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="card" role="main" aria-labelledby="title">-->
+<!--    <h1 id="title">Simple Calculator</h1>-->
+
+<!--    <label for="num1">Number 1</label>-->
+<!--    <input id="num1" type="number" step="any" placeholder="e.g. 10" required>-->
+
+<!--    <label for="num2">Number 2</label>-->
+<!--    <input id="num2" type="number" step="any" placeholder="e.g. 5" required>-->
+
+<!--    <label for="op">Operation</label>-->
+<!--    <select id="op" aria-label="operation">-->
+<!--        <option value="+">Addition (+)</option>-->
+<!--        <option value="-">Subtraction (-)</option>-->
+<!--        <option value="*">Multiplication (*)</option>-->
+<!--        <option value="/">Division (/)</option>-->
+<!--        <option value="%">Modulo (%)</option>-->
+<!--    </select>-->
+
+<!--    <button id="btn">Calculate</button>-->
+<!--    <div id="status" class="small">Sends JSON to <code>/api/calculator/calculate</code></div>-->
+
+<!--    <div id="out"></div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    const num1El = document.getElementById('num1');-->
+<!--    const num2El = document.getElementById('num2');-->
+<!--    const opEl = document.getElementById('op');-->
+<!--    const btn = document.getElementById('btn');-->
+<!--    const out = document.getElementById('out');-->
+<!--    const status = document.getElementById('status');-->
+
+<!--    function showResult(value) {-->
+<!--        out.innerHTML = `<div class="result">Result: ${value}</div>`;-->
+<!--    }-->
+<!--    function showError(message) {-->
+<!--        out.innerHTML = `<div class="error">${message}</div>`;-->
+<!--    }-->
+<!--    function setLoading(on) {-->
+<!--        btn.disabled = on;-->
+<!--        btn.textContent = on ? 'Calculating...' : 'Calculate';-->
+<!--    }-->
+
+<!--    btn.addEventListener('click', async () => {-->
+<!--        out.innerHTML = '';-->
+<!--        const num1 = num1El.value;-->
+<!--        const num2 = num2El.value;-->
+<!--        const operation = opEl.value;-->
+
+<!--        // basic validation-->
+<!--        if (num1 === '' || num2 === '') {-->
+<!--            showError('Please provide both numbers.');-->
+<!--            return;-->
+<!--        }-->
+
+<!--        const payload = {-->
+<!--            num1: parseFloat(num1),-->
+<!--            num2: parseFloat(num2),-->
+<!--            operation: operation-->
+<!--        };-->
+
+<!--        setLoading(true);-->
+<!--        status.textContent = 'Calling server...';-->
+
+<!--        try {-->
+<!--            const res = await fetch('/api/calculator/calculate', {-->
+<!--                method: 'POST',-->
+<!--                headers: { 'Content-Type': 'application/json' },-->
+<!--                body: JSON.stringify(payload)-->
+<!--            });-->
+
+<!--            // handle non-2xx-->
+<!--            if (!res.ok) {-->
+<!--                // try to parse JSON/text message-->
+<!--                let text;-->
+<!--                try { text = await res.text(); }-->
+<!--                catch (e) { text = res.statusText; }-->
+<!--                throw new Error(text || `Server returned ${res.status}`);-->
+<!--            }-->
+
+<!--            // server returns a raw number (e.g. 15.0)-->
+<!--            const text = await res.text();-->
+<!--            showResult(text);-->
+<!--            status.textContent = 'Done';-->
+<!--        } catch (err) {-->
+<!--            // user-friendly message-->
+<!--            showError(err.message || 'Request failed.');-->
+<!--            status.textContent = 'Error';-->
+<!--        } finally {-->
+<!--            setLoading(false);-->
+<!--        }-->
+<!--    });-->
+
+<!--    // allow pressing Enter in inputs to trigger-->
+<!--    [num1El, num2El].forEach(el => {-->
+<!--        el.addEventListener('keydown', (e) => {-->
+<!--            if (e.key === 'Enter') btn.click();-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
