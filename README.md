@@ -39,7 +39,7 @@ It provides an API (and optional HTML UI) to perform basic arithmetic operations
 ---
 
 ## 📂 Project Structure
-
+```
 src/
 └── main/
 ├── java/com/example/calculator
@@ -48,9 +48,13 @@ src/
 │ ├── service/CalculatorService # Business logic
 │ └── model/CalculatorRequest # Request model
 └── resources/
-├── static/index.html # Simple HTML frontend (optional)
+|  ├── static/
+|     ├── index.html
+|     ├── style.css
+|     └── script.js
+|  ├── /templates
 └── application.properties
-
+```
 ---
 
 ## ⚙️ How to Run Locally
@@ -73,7 +77,7 @@ URL: http://localhost:8080/api/calculator/calculate
 Headers: Content-Type: application/json
 
 Body:
-
+```
 json
 {
   "num1": 10,
@@ -81,7 +85,7 @@ json
   "operation": "*"
 }
 
-
+```
 Response:
 
 50.0
